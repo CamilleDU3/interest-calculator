@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Known Dev Dependencies Vulnerabilities
+
+Some development dependencies in this project show known security vulnerabilities.  
+These affect only **development tools** (like ESLint and its plugins) and **do not impact production**.
+
+For example, the `minimatch` package used by ESLint may have a ReDoS vulnerability.  
+This project is safe to run for development and production purposes.
+
+You can view details of known vulnerabilities by running:
+
+```bash
+npm audit
