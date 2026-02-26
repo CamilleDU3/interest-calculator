@@ -2,6 +2,7 @@
 # README
 
 ## Link
+
 https://my-little-interest-calculator.vercel.app/
 
 ## Overview
@@ -10,7 +11,12 @@ Investment Simulation & Return Calculator is a web application designed to help 
 
 The platform allows users to simulate different investment scenarios by adjusting variables such as initial capital, contribution amount, interest rate, and duration. It provides clear projections and visualizations to support better financial planning and decision-making.
 
+## Documentation
+
+The project backlog and detailed use cases are documented in [`docs/use-cases.md`](./docs/use-cases.md).
+
 
 ## Disclaimer
+
 This application is intended for educational and informational purposes only.  
 It does not constitute financial advice. Investment returns are not guaranteed and depend on market conditions and risk factors.
