@@ -1,9 +1,10 @@
+import Link from 'next/link'
 import NavButton from "./NavButton";
 
-export default function() {
+export default function NavBar() {
     return (
         <nav className="flex justify-between p-4 items-center">
-            <a href="/">
+            <Link href="/">
                 <h1 className="
                         font-bold 
                         text-3xl 
@@ -13,7 +14,7 @@ export default function() {
                 >
                     Interest calculator
                 </h1>
-            </a>
+            </Link>
             <div className="space-x-4">
                 <NavButton href="/">Home</NavButton>
                 <NavButton href="/calculator">Calculator</NavButton>

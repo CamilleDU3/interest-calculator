@@ -1,6 +1,7 @@
+import Link from 'next/link'
 export default function NavButton({ children, href }: { children: string; href: string }) {
     return (
-        <a 
+        <Link
             href={href}
             className="
                 underline 
@@ -11,7 +12,7 @@ export default function NavButton({ children, href }: { children: string; href: 
                 text-blue"
         >
             {children}
-        </a>
+        </Link>
     )
 
 }
