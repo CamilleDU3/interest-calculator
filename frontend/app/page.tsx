@@ -3,6 +3,7 @@ import SecondaryButton from '@/components/SecondaryButton';
 
 //TODO: centralize color with primary and secondary colors
 //TODO: centralize routes
+//TODO: fix the scrollbar on landing page from the <main className="min-h-screen">
 export default function Home() {
     return (
         <main className="min-h-screen flex flex-col items-center justify-center">
