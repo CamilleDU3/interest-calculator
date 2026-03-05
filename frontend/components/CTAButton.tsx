@@ -13,11 +13,11 @@ export default function CTAButton({
         <Link
             href={href}
             className="
-                bg-[#203756]
-                text-white 
+                bg-primary
+                text-background
                 rounded-lg
                 px-4 py-4  
-                hover:bg-black
+                hover:bg-foreground
                 transition-colors duration-300
             "
         >

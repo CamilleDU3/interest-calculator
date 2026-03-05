@@ -4,12 +4,11 @@ export default function NavButton({ children, href }: { children: string; href: 
         <Link
             href={href}
             className="
-                underline 
-                [text-underline-offset:4px] 
-                shadow-lg 
-                hover:shadow 
+                text-xl
+                hover:text-secondary
                 font-bold 
-                text-blue"
+                text-primary
+            "
         >
             {children}
         </Link>

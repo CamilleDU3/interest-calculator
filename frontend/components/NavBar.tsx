@@ -7,9 +7,9 @@ export default function NavBar() {
             <Link href="/">
                 <h1 className="
                         font-bold 
-                        text-3xl 
+                        text-4xl 
                         [text-shadow:1px_1px_1px_rgba(0,0,0,0.3)]
-                        text-blue
+                        text-primary
                     "
                 >
                     Interest calculator

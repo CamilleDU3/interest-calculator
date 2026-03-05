@@ -11,14 +11,13 @@ export default function SecondaryButton({
         <Link
             href={href}
             className="
-                bg-white 
+                bg-background
+                text-foreground 
                 border 
                 border-gray-300
                 rounded-lg 
                 mx-4
                 px-6 py-3 
-                hover:bg-gray-100 
-                transition-colors duration-300
             "
         >
             {children}
