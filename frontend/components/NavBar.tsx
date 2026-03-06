@@ -1,11 +1,13 @@
-import Link from 'next/link'
-import NavButton from "./NavButton";
+import Link from 'next/link';
+import NavButton from './NavButton';
+import { navigation } from '@/config/navigation';
 
 export default function NavBar() {
     return (
-        <nav className="flex justify-between p-4 items-center">
+        <div className="flex justify-between p-4 items-center">
             <Link href="/">
-                <h1 className="
+                <h1
+                    className="
                         font-bold 
                         text-4xl 
                         [text-shadow:1px_1px_1px_rgba(0,0,0,0.3)]
@@ -15,12 +17,13 @@ export default function NavBar() {
                     Interest calculator
                 </h1>
             </Link>
-            <div className="space-x-4">
-                <NavButton href="/">Home</NavButton>
-                <NavButton href="/calculator">Calculator</NavButton>
-                <NavButton href="/contact">Contact</NavButton>
-                <NavButton href="/login">Login</NavButton>
-            </div>
-        </nav>
-    )
+            <nav className="space-x-4">
+                {navigation.map((navItem) => (
+                    <NavButton key={navItem.href} href={navItem.href}>
+                        {navItem.label}
+                    </NavButton>
+                ))}
+            </nav>
+        </div>
+    );
 }
