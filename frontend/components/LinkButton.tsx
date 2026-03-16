@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-const buttonStyles = cva('', {
+const linkButtonStyles = cva('', {
     variants: {
         variant: {
             cta: 'bg-primary text-background rounded-lg px-4 py-4 hover:bg-foreground transition-colors duration-300',
@@ -14,18 +14,22 @@ const buttonStyles = cva('', {
         variant: 'secondary',
     },
 });
-type ButtonStylesTypes = VariantProps<typeof buttonStyles>;
-type ButtonVariant = ButtonStylesTypes['variant'];
+type LinkButtonStylesTypes = VariantProps<typeof linkButtonStyles>;
+type LinkButtonVariant = LinkButtonStylesTypes['variant'];
 
-type ButtonProps = {
-    variant?: ButtonVariant;
+type LinkButtonProps = {
+    variant?: LinkButtonVariant;
     href: string;
     children: React.ReactNode;
 };
-export default function Button({ variant, href, children }: ButtonProps) {
-    const buttonClassName = buttonStyles({ variant });
+export default function LinkButton({
+    variant,
+    href,
+    children,
+}: LinkButtonProps) {
+    const linkButtonClassName = linkButtonStyles({ variant });
     return (
-        <Link className={buttonClassName} href={href}>
+        <Link className={linkButtonClassName} href={href}>
             {children}
         </Link>
     );
