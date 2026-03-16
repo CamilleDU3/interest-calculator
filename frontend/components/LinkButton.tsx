@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link, { LinkProps } from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const linkButtonStyles = cva('', {
@@ -17,19 +17,24 @@ const linkButtonStyles = cva('', {
 type LinkButtonStylesTypes = VariantProps<typeof linkButtonStyles>;
 type LinkButtonVariant = LinkButtonStylesTypes['variant'];
 
-type LinkButtonProps = {
+type LinkButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     variant?: LinkButtonVariant;
-    href: string;
-    children: React.ReactNode;
+    href: LinkProps['href'];
 };
 export default function LinkButton({
     variant,
     href,
+    className,
     children,
+    ...props
 }: LinkButtonProps) {
-    const linkButtonClassName = linkButtonStyles({ variant });
+    const linkButtonVariantStyle = linkButtonStyles({ variant });
     return (
-        <Link className={linkButtonClassName} href={href}>
+        <Link
+            className={`${linkButtonVariantStyle} ${className || ''}`}
+            href={href}
+            {...props}
+        >
             {children}
         </Link>
     );
