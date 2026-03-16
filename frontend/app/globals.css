@@ -5,6 +5,7 @@
   --foreground: #171717;
   --primary: #203756;
   --secondary: #6b6b6b;
+  --hover: #D1D5DB; /* TODO: check the hover of every button and use this color for hovering instead */
   --background-image: url('/light-bg.jpg');
 }
 
@@ -13,6 +14,7 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-hover: var(--hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -24,7 +26,8 @@
     --background: #171717; 
     --foreground: #888888;  
     --primary: #23a2d09f;    
-    --secondary: #a4a4a4;   
+    --secondary: #a4a4a4; 
+    --hover: #D1D5DB;  
     /*TODO: add a background image for dark theme --background-image: url('/dark-bg.jpg');*/
   } 
 }
