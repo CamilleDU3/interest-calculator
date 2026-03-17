@@ -14,8 +14,11 @@ export default function InputNumber({
     ...props
 }: InputProps) {
     return (
-        <div className="mb-5">
-            <label htmlFor={id} className="block mx-5 font-bold">
+        <div className="mb-6">
+            <label
+                htmlFor={id}
+                className="block mx-5 font-bold text-shadow-[1px_1px_1px_rgba(0,0,0,0.2)]"
+            >
                 {labelText}
             </label>
             <input
@@ -23,7 +26,7 @@ export default function InputNumber({
                 id={id}
                 name={name ?? id + '-name'}
                 value={value}
-                className="bg-background text-center ${className || ''}"
+                className="bg-background text-center border border-gray-300 rounded px-4 py-1 shadow ${className || ''}"
                 {...props}
             />
         </div>

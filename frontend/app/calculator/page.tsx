@@ -3,7 +3,6 @@ import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
 import { useState } from 'react';
 
-//TODO: improve the UI design
 //TODO: create the function to handle onChange event of inputs (=recalculation and update of the graph)
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 //TODO: add the compound type (before increment, after increment) input
@@ -19,8 +18,10 @@ export default function calculator() {
 
     return (
         <main>
-            <div className="mx-30 my-20">
-                <p className="my-6 text-3xl">Modes</p>
+            <div className="mx-30 my-10">
+                <p className="my-2 text-3xl text-shadow-[1px_1px_2px_rgba(0,0,0,0.5)]">
+                    Modes
+                </p>
                 <div>
                     <Button variant="secondary">Simple</Button>
                     <Button variant="secondary">Advanced</Button>
