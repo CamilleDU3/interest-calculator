@@ -22,9 +22,7 @@ export default function calculator() {
             <div className="mx-30 my-20">
                 <p className="my-6 text-3xl">Modes</p>
                 <div>
-                    <Button variant="secondary" onClick={() => alert('test')}>
-                        Simple
-                    </Button>
+                    <Button variant="secondary">Simple</Button>
                     <Button variant="secondary">Advanced</Button>
                     <Button hidden disabled variant="secondary">
                         Monte-Carlo
