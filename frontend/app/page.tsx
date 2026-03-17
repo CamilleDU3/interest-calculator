@@ -10,7 +10,7 @@ export default function Home() {
                 <span>broadly in one</span>
                 <span>simulation</span>
             </h1>
-            <h2 className="m-6 text-2xl text-secondary">
+            <h2 className="m-6 text-2xl text-secondary text-center">
                 Get a reel feel of what investing in this strategy is over the
                 years
             </h2>
