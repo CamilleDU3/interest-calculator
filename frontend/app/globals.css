@@ -20,6 +20,10 @@
 }
 
 
+/*
+//TODO: Re-enable dark mode
+//  Before re-enabling, review and adjust the styles 
+//  to ensure colors and images look correct for texts, buttons and inputs.
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -31,6 +35,7 @@
     --background-image: url('/dark-bg.jpg');
   } 
 }
+*/
 
 body {
   background: var(--background);
