@@ -28,7 +28,7 @@
     --primary: #23a2d09f;    
     --secondary: #a4a4a4; 
     --hover: #D1D5DB;  
-    /*TODO: add a background image for dark theme --background-image: url('/dark-bg.jpg');*/
+    --background-image: url('/dark-bg.jpg');
   } 
 }
 
