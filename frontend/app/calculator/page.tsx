@@ -53,7 +53,7 @@ export default function CalculatorPage() {
                         onChange={(e) => {
                             setMonthlyIncrement(e.target.value);
                         }}
-                    />{' '}
+                    />
                     <InputNumber
                         id="investment-length-year"
                         labelText="Investment Length Years"
@@ -63,7 +63,7 @@ export default function CalculatorPage() {
                         onChange={(e) => {
                             setInvestLengthYear(e.target.value);
                         }}
-                    />{' '}
+                    />
                     <InputNumber
                         id="investment-length-month"
                         labelText="Investment Length Months"
@@ -73,7 +73,7 @@ export default function CalculatorPage() {
                         onChange={(e) => {
                             setInvestLengthMonth(e.target.value);
                         }}
-                    />{' '}
+                    />
                     <InputNumber
                         id="interest-rate-percent"
                         labelText="Interest Rate (%)"
@@ -84,7 +84,7 @@ export default function CalculatorPage() {
                         onChange={(e) => {
                             setInterestRate(e.target.value);
                         }}
-                    />{' '}
+                    />
                     <InputNumber
                         id="compound-time"
                         labelText="Compound every X months"
