@@ -4,9 +4,10 @@ import InputNumber from '@/components/InputNumber';
 import { useState } from 'react';
 
 //TODO: create the function to handle onChange event of inputs (=recalculation and update of the graph)
-//TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
-//TODO: add the compound type (before increment, after increment) input
 //TODO: add the graph
+//TODO: add the compound type (before increment, after increment) input
+//TODO: allow different compounding time for inflation rate
+//TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 export default function CalculatorPage() {
     const [initialCapital, setInitialCapital] = useState('10000');
     const [monthlyIncrement, setMonthlyIncrement] = useState('1000');
@@ -14,7 +15,7 @@ export default function CalculatorPage() {
     const [investLengthMonth, setInvestLengthMonth] = useState('6');
     const [interestRate, setInterestRate] = useState('7.52');
     const [compoundTime, setCompoundTime] = useState('12');
-    const [monthlyInflationRate, setMonthlyInflationRate] = useState('2');
+    const [inflationRate, setInflationRate] = useState('2');
 
     return (
         <main>
@@ -95,13 +96,13 @@ export default function CalculatorPage() {
                         }}
                     />
                     <InputNumber
-                        id="monthly-inflation-rate"
-                        labelText="Monthly Inflation Rate"
+                        id="inflation-rate"
+                        labelText="Annual Inflation Rate"
                         required
                         min="0"
-                        value={monthlyInflationRate}
+                        value={inflationRate}
                         onChange={(e) => {
-                            setMonthlyInflationRate(e.target.value);
+                            setInflationRate(e.target.value);
                         }}
                     />
                 </fieldset>
