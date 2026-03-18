@@ -9,13 +9,23 @@ import { useState } from 'react';
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 export default function CalculatorPage() {
-    const [initialCapital, setInitialCapital] = useState('10000');
-    const [monthlyIncrement, setMonthlyIncrement] = useState('1000');
-    const [investLengthYear, setInvestLengthYear] = useState('10');
-    const [investLengthMonth, setInvestLengthMonth] = useState('6');
-    const [interestRate, setInterestRate] = useState('7.52');
-    const [compoundTime, setCompoundTime] = useState('12');
-    const [inflationRate, setInflationRate] = useState('2');
+    const [inputs, setInputs] = useState({
+        initialCapital: 10000,
+        monthlyIncrement: 1000,
+        investLengthYear: 10,
+        investLengthMonth: 6,
+        interestRate: 7.52,
+        compoundTime: 12,
+        inflationRate: 2,
+    });
+    const handleChange = (e: { target: { name: any; value: any } }) => {
+        setInputs((prevInputs) => {
+            return {
+                ...prevInputs,
+                [e.target.name]: [e.target.value],
+            };
+        });
+    };
 
     return (
         <main>
@@ -39,40 +49,36 @@ export default function CalculatorPage() {
                         required
                         min="0"
                         step="1"
-                        value={initialCapital}
-                        onChange={(e) => {
-                            setInitialCapital(e.target.value);
-                        }}
+                        name="initialCapital"
+                        value={inputs.initialCapital}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="monthly-increment"
                         labelText="Monthly Increment"
                         required
                         min="0"
-                        value={monthlyIncrement}
-                        onChange={(e) => {
-                            setMonthlyIncrement(e.target.value);
-                        }}
+                        name="monthlyIncrement"
+                        value={inputs.monthlyIncrement}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="investment-length-year"
                         labelText="Investment Length Years"
                         required
                         min="0"
-                        value={investLengthYear}
-                        onChange={(e) => {
-                            setInvestLengthYear(e.target.value);
-                        }}
+                        name="investLengthYear"
+                        value={inputs.investLengthYear}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="investment-length-month"
                         labelText="Investment Length Months"
                         required
                         min="0"
-                        value={investLengthMonth}
-                        onChange={(e) => {
-                            setInvestLengthMonth(e.target.value);
-                        }}
+                        name="investLengthMonth"
+                        value={inputs.investLengthMonth}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="interest-rate-percent"
@@ -80,30 +86,27 @@ export default function CalculatorPage() {
                         required
                         min="0"
                         step="0.01"
-                        value={interestRate}
-                        onChange={(e) => {
-                            setInterestRate(e.target.value);
-                        }}
+                        name="interestRate"
+                        value={inputs.interestRate}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="compound-time"
                         labelText="Compound every X months"
                         required
                         min="0"
-                        value={compoundTime}
-                        onChange={(e) => {
-                            setCompoundTime(e.target.value);
-                        }}
+                        name="compoundTime"
+                        value={inputs.compoundTime}
+                        onChange={handleChange}
                     />
                     <InputNumber
                         id="inflation-rate"
                         labelText="Annual Inflation Rate"
                         required
                         min="0"
-                        value={inflationRate}
-                        onChange={(e) => {
-                            setInflationRate(e.target.value);
-                        }}
+                        name="inflationRate"
+                        value={inputs.inflationRate}
+                        onChange={handleChange}
                     />
                 </fieldset>
 
