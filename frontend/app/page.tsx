@@ -2,7 +2,7 @@ import LinkButton from '@/components/LinkButton';
 import { routes } from '@/config/routes';
 
 //TODO: fix the scrollbar on landing page from the <main className="min-h-screen">
-export default function Home() {
+export default function HomePage() {
     return (
         <main className="min-h-screen flex flex-col items-center justify-center">
             <h1 className="text-7xl font-bold flex flex-col text-center text-primary">

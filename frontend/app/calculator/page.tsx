@@ -7,7 +7,7 @@ import { useState } from 'react';
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 //TODO: add the compound type (before increment, after increment) input
 //TODO: add the graph
-export default function calculator() {
+export default function CalculatorPage() {
     const [initialCapital, setInitialCapital] = useState('10000');
     const [monthlyIncrement, setMonthlyIncrement] = useState('1000');
     const [investLengthYear, setInvestLengthYear] = useState('10');
