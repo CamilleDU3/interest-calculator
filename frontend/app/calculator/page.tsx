@@ -147,7 +147,6 @@ export default function CalculatorPage() {
                         </tbody>
                     </table>
                 </div>
-                <div>Future Graph</div>
             </div>
         </main>
     );
