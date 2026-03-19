@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import NavButton from './NavButton';
 import { navigation } from '@/config/navigation';
+import Button from './Button';
 
 export default function NavBar() {
     return (
@@ -19,9 +19,13 @@ export default function NavBar() {
             </Link>
             <nav className="space-x-4">
                 {navigation.map((navItem) => (
-                    <NavButton key={navItem.href} href={navItem.href}>
+                    <Button
+                        variant="nav"
+                        key={navItem.href}
+                        href={navItem.href}
+                    >
                         {navItem.label}
-                    </NavButton>
+                    </Button>
                 ))}
             </nav>
         </div>

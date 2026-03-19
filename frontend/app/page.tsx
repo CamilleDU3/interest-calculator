@@ -1,5 +1,4 @@
-import CTAButton from '@/components/CTAButton';
-import SecondaryButton from '@/components/SecondaryButton';
+import Button from '@/components/Button';
 import { routes } from '@/config/routes';
 
 //TODO: fix the scrollbar on landing page from the <main className="min-h-screen">
@@ -16,8 +15,12 @@ export default function Home() {
                 years
             </h2>
             <div>
-                <CTAButton href={routes.calculator}>Start Now</CTAButton>
-                <SecondaryButton href={routes.login}>Login</SecondaryButton>
+                <Button variant="cta" href={routes.calculator}>
+                    Start Now
+                </Button>
+                <Button variant="secondary" href={routes.login}>
+                    Login
+                </Button>
             </div>
         </main>
     );
