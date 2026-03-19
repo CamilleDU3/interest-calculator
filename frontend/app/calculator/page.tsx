@@ -1,7 +1,8 @@
 'use client';
 import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
-import { useState } from 'react';
+import calculateIncomePerMonth from '@/lib/calculators/income';
+import { useEffect, useState } from 'react';
 
 //TODO: create the function to handle onChange event of inputs (=recalculation and update of the graph)
 //TODO: add the graph
@@ -18,6 +19,8 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
+    const [incomePerMonth, setIncomePerMonth] = useState<number[][]>([]);
+
     const handleChange = (e: { target: { name: any; value: any } }) => {
         setInputs((prevInputs) => {
             return {
@@ -26,6 +29,20 @@ export default function CalculatorPage() {
             };
         });
     };
+
+    useEffect(() => {
+        setIncomePerMonth(
+            calculateIncomePerMonth(
+                inputs.initialCapital,
+                inputs.monthlyIncrement,
+                inputs.investLengthYear,
+                inputs.investLengthMonth,
+                inputs.interestRate,
+                inputs.compoundTime,
+                inputs.inflationRate
+            )
+        );
+    }, [inputs]);
 
     return (
         <main>
@@ -41,7 +58,7 @@ export default function CalculatorPage() {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-40">
+            <div className="flex items-center space-x-40 gap-30">
                 <fieldset className="mx-20">
                     <InputNumber
                         id="initial-capital"
@@ -110,6 +127,26 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
+                <div>
+                    <table className="border-separate border-spacing-4 text-center ">
+                        <thead className="sticky top-0">
+                            <tr>
+                                <th>Year</th>
+                                <th>Total Income</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {incomePerMonth.map((value, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{index}</td>
+                                        <td>{value[value.length - 1]}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
                 <div>Future Graph</div>
             </div>
         </main>
