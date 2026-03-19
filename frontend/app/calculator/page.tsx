@@ -46,11 +46,11 @@ export default function CalculatorPage() {
 
     return (
         <main>
-            <div className="mx-30 my-10">
+            <div className="mx-30 mt-5 mb-10">
                 <p className="my-2 text-3xl text-shadow-[1px_1px_2px_rgba(0,0,0,0.5)]">
                     Modes
                 </p>
-                <div>
+                <div className="flex">
                     <Button variant="secondary">Simple</Button>
                     <Button variant="secondary">Advanced</Button>
                     <Button hidden disabled variant="secondary">
@@ -58,8 +58,8 @@ export default function CalculatorPage() {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-40 gap-30">
-                <fieldset className="mx-20">
+            <div className="flex flex-col sm:flex-row">
+                <fieldset className="ml-20">
                     <InputNumber
                         id="initial-capital"
                         labelText="Initial Capital"
@@ -127,9 +127,9 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
-                <div>
-                    <table className="border-separate border-spacing-4 text-center ">
-                        <thead className="sticky top-0">
+                <div className="h-[70vh] overflow-auto ml-20">
+                    <table className="text-center border-separate border-spacing-4">
+                        <thead className="sticky top-0 backdrop-blur-[1.5px]">
                             <tr>
                                 <th>Year</th>
                                 <th>Total Income</th>
