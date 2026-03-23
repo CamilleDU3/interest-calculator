@@ -1,11 +1,10 @@
 'use client';
 import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
+import LineGraph from '@/components/LineGraph';
 import calculateIncomePerMonth from '@/lib/calculators/income';
 import { useEffect, useState } from 'react';
 
-//TODO: create the function to handle onChange event of inputs (=recalculation and update of the graph)
-//TODO: add the graph
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
@@ -127,6 +126,10 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
+                <div className="mt-10 ml-20 h-[50vh] w-[100vh]">
+                    <LineGraph totalIncome={incomePerMonth}></LineGraph>
+                </div>
+                
                 <div className="h-[70vh] overflow-auto ml-20">
                     <table className="text-center border-separate border-spacing-4">
                         <thead className="sticky top-0 backdrop-blur-[1.5px]">
