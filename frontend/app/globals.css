@@ -7,6 +7,13 @@
   --secondary: #6b6b6b;
   --hover: #D1D5DB; /* TODO: check the hover of every button and use this color for hovering instead */
   --background-image: url('/light-bg.jpg');
+  
+  /* CHART COLORS */
+  --chart-1-line: #9bc1ff52;
+  --chart-1-fill: #3b82f61a;
+  --chart-point-border: #498cff4f;
+  --chart-point-background: #498cff4f;
+  
 }
 
 @theme inline {

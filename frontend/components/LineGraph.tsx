@@ -1,4 +1,5 @@
 'client use';
+import { getCSSVar } from '@/lib/utils/getCSSVar';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -31,20 +32,18 @@ export default function LineGraph({ monthlyTotals }: LineGraphProps) {
     const data = {
         labels: xAxisLabelYear,
         datasets: [
-            //TODO: use the colors from the global.css (primary, secondary, etc.)
             {
                 // ---- DATA ----
                 label: 'Total',
                 data: yearlyTotals,
                 fill: true,
-                borderColor: 'rgba(155, 193, 255, 0)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: getCSSVar('--chart-1-line'),
                 // ---- POINT CUSTOMISATION ----
                 pointRadius: 6,
                 pointHoverRadius: 25,
                 pointBorderWidth: 4,
-                pointBorderColor: 'rgba(73, 140, 255, 0.31)',
-                pointBackgroundColor: 'rgba(73, 140, 255, 0.31)',
+                pointBorderColor: getCSSVar('--chart-point-border'),
+                pointBackgroundColor: getCSSVar('--chart-point-background'),
             },
         ],
     };
