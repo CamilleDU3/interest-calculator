@@ -2,7 +2,7 @@
 import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
 import LineGraph from '@/components/LineGraph';
-import calculateIncomePerMonth from '@/lib/calculators/income';
+import calcInvestmentGrowth from '@/lib/calculators/investmentGrowth';
 import { useEffect, useState } from 'react';
 
 //TODO: add the compound type (before increment, after increment) input
@@ -18,7 +18,7 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
-    const [incomePerMonth, setIncomePerMonth] = useState<number[][]>([]);
+    const [monthlyTotals, setMonthlyTotals] = useState<number[]>([]);
 
     const handleChange = (e: { target: { name: any; value: any } }) => {
         setInputs((prevInputs) => {
@@ -30,8 +30,8 @@ export default function CalculatorPage() {
     };
 
     useEffect(() => {
-        setIncomePerMonth(
-            calculateIncomePerMonth(
+        setMonthlyTotals(
+            calcInvestmentGrowth(
                 inputs.initialCapital,
                 inputs.monthlyIncrement,
                 inputs.investLengthYear,
@@ -127,26 +127,30 @@ export default function CalculatorPage() {
                 </fieldset>
 
                 <div className="mt-10 ml-20 h-[50vh] w-[100vh]">
-                    <LineGraph totalIncome={incomePerMonth}></LineGraph>
+                    <LineGraph monthlyTotals={monthlyTotals}></LineGraph>
                 </div>
-                
+
                 <div className="h-[70vh] overflow-auto ml-20">
                     <table className="text-center border-separate border-spacing-4">
                         <thead className="sticky top-0 backdrop-blur-[1.5px]">
                             <tr>
                                 <th>Year</th>
-                                <th>Total Income</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {incomePerMonth.map((value, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{index}</td>
-                                        <td>{value[value.length - 1]}</td>
-                                    </tr>
-                                );
-                            })}
+                            {monthlyTotals
+                                .filter((_, index) => index % 12 === 0)
+                                .map((value, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index}</td>
+                                            <td>
+                                                {value.toLocaleString('en-US')}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>

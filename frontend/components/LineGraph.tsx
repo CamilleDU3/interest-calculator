@@ -20,24 +20,22 @@ ChartJS.register(
     Filler
 );
 type LineGraphProps = {
-    totalIncome: number[][];
+    monthlyTotals: number[];
 };
-export default function LineGraph({ totalIncome }: LineGraphProps) {
+export default function LineGraph({ monthlyTotals }: LineGraphProps) {
     const xAxisLabelType = 'Year';
-    const totalIncomePerYear: number[] = (totalIncome || []).map(
-        (monthlyValues) => {
-            return monthlyValues ? monthlyValues[monthlyValues.length - 1] : 0;
-        }
+    const yearlyTotals: number[] = monthlyTotals.filter(
+        (_, index) => index % 12 === 0
     );
-    const xAxisLabelYear = [...totalIncomePerYear.keys()];
+    const xAxisLabelYear = [...yearlyTotals.keys()];
     const data = {
         labels: xAxisLabelYear,
         datasets: [
             //TODO: use the colors from the global.css (primary, secondary, etc.)
             {
                 // ---- DATA ----
-                label: 'Total Income',
-                data: totalIncomePerYear,
+                label: 'Total',
+                data: yearlyTotals,
                 fill: true,
                 borderColor: 'rgba(155, 193, 255, 0)',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -58,11 +56,13 @@ export default function LineGraph({ totalIncome }: LineGraphProps) {
                 callbacks: {
                     title: function (context: TooltipItem<'line'>[]) {
                         const title = context[0].label || '';
-                        return xAxisLabelType + title;
+                        return xAxisLabelType + ' ' + title;
                     },
                     label: function (context: TooltipItem<'line'>) {
+                        const label = context.dataset.label;
                         const value = context.formattedValue;
-                        return 'Total Income : ' + value;
+
+                        return label + ' : ' + value;
                     },
                 },
 
