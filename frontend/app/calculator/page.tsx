@@ -20,7 +20,7 @@ export default function CalculatorPage() {
     });
     const [monthlyTotals, setMonthlyTotals] = useState<number[]>([]);
 
-    const handleChange = (e: { target: { name: any; value: any } }) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputs((prevInputs) => {
             return {
                 ...prevInputs,
