@@ -7,6 +7,8 @@ import calcInvestmentGrowth, {
 } from '@/lib/calculators/investmentGrowth';
 import { useEffect, useState } from 'react';
 
+//TODO: use a table of chartjs instead of native html <table>
+//TODO: add tooltip on chart explaining the meaning of the values in each column
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
@@ -36,13 +38,13 @@ export default function CalculatorPage() {
 
     useEffect(() => {
         const investmentResults: InvestmentResult[] = calcInvestmentGrowth(
-                inputs.initialCapital,
-                inputs.monthlyIncrement,
-                inputs.investLengthYear,
-                inputs.investLengthMonth,
-                inputs.interestRate,
-                inputs.compoundTime,
-                inputs.inflationRate
+            inputs.initialCapital,
+            inputs.monthlyIncrement,
+            inputs.investLengthYear,
+            inputs.investLengthMonth,
+            inputs.interestRate,
+            inputs.compoundTime,
+            inputs.inflationRate
         );
 
         setInvestmentResults(investmentResults);
@@ -131,16 +133,21 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
-                <div className="mt-10 ml-20 h-[50vh] w-[100vh]">
-                    <LineGraph monthlyTotals={monthlyTotals}></LineGraph>
+                <div className="mt-10 ml-10 h-[50vh] w-[100vh]">
+                    <LineGraph
+                        investmentResults={investmentResults}
+                    ></LineGraph>
                 </div>
 
-                <div className="h-[70vh] overflow-auto ml-20">
+                <div className="h-[70vh] overflow-auto mx-10">
                     <table className="text-center border-separate border-spacing-4">
                         <thead className="sticky top-0 backdrop-blur-[1.5px]">
                             <tr>
                                 <th>Year</th>
                                 <th>Total</th>
+                                <th>Acc. Interest</th>
+                                <th>Interest (yearly)</th>
+                                <th>Interest Share (yearly)(%)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -158,6 +165,27 @@ export default function CalculatorPage() {
                                                 {investmentResult.balance.toLocaleString(
                                                     'en-US'
                                                 )}
+                                            </td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.balance
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.accInterest
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.yearlyInterest
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {(
+                                                    investmentResult.yearlyInterestShare *
+                                                    100
+                                                ).toLocaleString('en-US')}
                                             </td>
                                         </tr>
                                     );
