@@ -1,4 +1,5 @@
 'client use';
+import { InvestmentResult } from '@/lib/calculators/investmentGrowth';
 import { getCSSVar } from '@/lib/utils/getCSSVar';
 import {
     Chart as ChartJS,
@@ -9,6 +10,7 @@ import {
     Tooltip,
     Filler,
     TooltipItem,
+    ChartOptions,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2'; //=wrapper of chart.js
 
@@ -21,34 +23,58 @@ ChartJS.register(
     Filler
 );
 type LineGraphProps = {
-    monthlyTotals: number[];
+    investmentResults: InvestmentResult[];
 };
-export default function LineGraph({ monthlyTotals }: LineGraphProps) {
+export default function LineGraph({ investmentResults }: LineGraphProps) {
     const xAxisLabelType = 'Year';
-    const yearlyTotals: number[] = monthlyTotals.filter(
-        (_, index) => index % 12 === 0
+    const yearlyResults: InvestmentResult[] = investmentResults.filter(
+        (_, index) => index % 12 === 0 || index == investmentResults.length - 1
     );
-    const xAxisLabelYear = [...yearlyTotals.keys()];
+    const xAxisLabelYear = [...yearlyResults.keys()];
     const data = {
         labels: xAxisLabelYear,
         datasets: [
             {
                 // ---- DATA ----
-                label: 'Total',
-                data: yearlyTotals,
+                label: 'Interest',
+                data: yearlyResults.map((value) => value.accInterest),
                 fill: true,
+                borderColor: getCSSVar('--chart-3-line'),
+                backgroundColor: getCSSVar('--chart-3-fill'),
+                stack: 'combined',
+                // ---- POINT CUSTOMISATION ----
+                pointRadius: 0,
+                pointHoverRadius: 0,
+            },
+            {
+                // ---- DATA ----
+                label: 'Invested',
+                data: yearlyResults.map((value) => value.accInvestment),
+                fill: true,
+                borderColor: getCSSVar('--chart-2-line'),
+                backgroundColor: getCSSVar('--chart-2-fill'),
+                stack: 'combined',
+                // ---- POINT CUSTOMISATION ----
+                pointRadius: 0,
+                pointHoverRadius: 0,
+            },
+            {
+                // ---- DATA ----
+                label: 'Total',
+                data: yearlyResults.map((value) => value.balance),
+                fill: false,
                 borderColor: getCSSVar('--chart-1-line'),
                 // ---- POINT CUSTOMISATION ----
-                pointRadius: 6,
-                pointHoverRadius: 25,
-                pointBorderWidth: 4,
+                pointRadius: 2,
+                pointHoverRadius: 10,
+                pointBorderWidth: 1,
                 pointBorderColor: getCSSVar('--chart-point-border'),
-                pointBackgroundColor: getCSSVar('--chart-point-background'),
+                pointBackgroundColor: getCSSVar('--chart-point-border'),
             },
         ],
     };
 
-    const options = {
+    const options: ChartOptions<'line'> = {
         responsive: true,
         plugins: {
             tooltip: {
@@ -81,6 +107,10 @@ export default function LineGraph({ monthlyTotals }: LineGraphProps) {
                 boxHeight: 15,
                 boxPadding: 5,
             },
+        },
+        interaction: {
+            mode: 'index',
+            intersect: false,
         },
         scales: {
             x: {

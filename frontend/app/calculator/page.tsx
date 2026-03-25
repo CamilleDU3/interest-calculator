@@ -2,7 +2,9 @@
 import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
 import LineGraph from '@/components/LineGraph';
-import calcInvestmentGrowth from '@/lib/calculators/investmentGrowth';
+import calcInvestmentGrowth, {
+    InvestmentResult,
+} from '@/lib/calculators/investmentGrowth';
 import { useEffect, useState } from 'react';
 
 //TODO: add the compound type (before increment, after increment) input
@@ -18,20 +20,22 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
-    const [monthlyTotals, setMonthlyTotals] = useState<number[]>([]);
+    const [investmentResults, setInvestmentResults] = useState<
+        InvestmentResult[]
+    >([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type } = e.target;
         setInputs((prevInputs) => {
             return {
                 ...prevInputs,
-                [e.target.name]: [e.target.value],
+                [name]: type === 'number' ? parseFloat(value) || 0 : value,
             };
         });
     };
 
     useEffect(() => {
-        setMonthlyTotals(
-            calcInvestmentGrowth(
+        const investmentResults: InvestmentResult[] = calcInvestmentGrowth(
                 inputs.initialCapital,
                 inputs.monthlyIncrement,
                 inputs.investLengthYear,
@@ -39,8 +43,9 @@ export default function CalculatorPage() {
                 inputs.interestRate,
                 inputs.compoundTime,
                 inputs.inflationRate
-            )
         );
+
+        setInvestmentResults(investmentResults);
     }, [inputs]);
 
     return (
@@ -58,7 +63,7 @@ export default function CalculatorPage() {
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row">
-                <fieldset className="ml-20">
+                <fieldset className="ml-15">
                     <InputNumber
                         id="initial-capital"
                         labelText="Initial Capital"
@@ -139,14 +144,20 @@ export default function CalculatorPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {monthlyTotals
-                                .filter((_, index) => index % 12 === 0)
-                                .map((value, index) => {
+                            {investmentResults
+                                .filter(
+                                    (_, index) =>
+                                        index % 12 === 0 ||
+                                        index == investmentResults.length - 1
+                                )
+                                .map((investmentResult, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{index}</td>
                                             <td>
-                                                {value.toLocaleString('en-US')}
+                                                {investmentResult.balance.toLocaleString(
+                                                    'en-US'
+                                                )}
                                             </td>
                                         </tr>
                                     );
