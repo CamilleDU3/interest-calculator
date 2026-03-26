@@ -133,7 +133,7 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
-                <div className="mt-10 ml-10 h-[50vh] w-[100vh]">
+                <div className="mt-10 ml-10 h-[70vh] w-[100vh]">
                     <LineGraph
                         investmentResults={investmentResults}
                     ></LineGraph>
