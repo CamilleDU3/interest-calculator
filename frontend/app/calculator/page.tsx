@@ -1,11 +1,14 @@
 'use client';
 import Button from '@/components/Button';
 import InputNumber from '@/components/InputNumber';
-import calculateIncomePerMonth from '@/lib/calculators/income';
+import LineGraph from '@/components/LineGraph';
+import calcInvestmentGrowth, {
+    InvestmentResult,
+} from '@/lib/calculators/investmentGrowth';
 import { useEffect, useState } from 'react';
 
-//TODO: create the function to handle onChange event of inputs (=recalculation and update of the graph)
-//TODO: add the graph
+//TODO: use a table of chartjs instead of native html <table>
+//TODO: add tooltip on chart explaining the meaning of the values in each column
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
@@ -19,29 +22,32 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
-    const [incomePerMonth, setIncomePerMonth] = useState<number[][]>([]);
+    const [investmentResults, setInvestmentResults] = useState<
+        InvestmentResult[]
+    >([]);
 
-    const handleChange = (e: { target: { name: any; value: any } }) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type } = e.target;
         setInputs((prevInputs) => {
             return {
                 ...prevInputs,
-                [e.target.name]: [e.target.value],
+                [name]: type === 'number' ? parseFloat(value) || 0 : value,
             };
         });
     };
 
     useEffect(() => {
-        setIncomePerMonth(
-            calculateIncomePerMonth(
-                inputs.initialCapital,
-                inputs.monthlyIncrement,
-                inputs.investLengthYear,
-                inputs.investLengthMonth,
-                inputs.interestRate,
-                inputs.compoundTime,
-                inputs.inflationRate
-            )
+        const investmentResults: InvestmentResult[] = calcInvestmentGrowth(
+            inputs.initialCapital,
+            inputs.monthlyIncrement,
+            inputs.investLengthYear,
+            inputs.investLengthMonth,
+            inputs.interestRate,
+            inputs.compoundTime,
+            inputs.inflationRate
         );
+
+        setInvestmentResults(investmentResults);
     }, [inputs]);
 
     return (
@@ -59,7 +65,7 @@ export default function CalculatorPage() {
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row">
-                <fieldset className="ml-20">
+                <fieldset className="ml-15">
                     <InputNumber
                         id="initial-capital"
                         labelText="Initial Capital"
@@ -127,23 +133,58 @@ export default function CalculatorPage() {
                     />
                 </fieldset>
 
-                <div className="h-[70vh] overflow-auto ml-20">
+                <div className="mt-10 ml-10 h-[70vh] w-[100vh]">
+                    <LineGraph
+                        investmentResults={investmentResults}
+                    ></LineGraph>
+                </div>
+
+                <div className="h-[70vh] w-[50vh] overflow-auto mx-10">
                     <table className="text-center border-separate border-spacing-4">
                         <thead className="sticky top-0 backdrop-blur-[1.5px]">
                             <tr>
                                 <th>Year</th>
-                                <th>Total Income</th>
+                                <th>Total</th>
+                                <th>Acc. Interest</th>
+                                <th>Interest (yearly)</th>
+                                <th>Interest Share (yearly)(%)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {incomePerMonth.map((value, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{index}</td>
-                                        <td>{value[value.length - 1]}</td>
-                                    </tr>
-                                );
-                            })}
+                            {investmentResults
+                                .filter(
+                                    (_, index) =>
+                                        index % 12 === 0 ||
+                                        index == investmentResults.length - 1
+                                )
+                                .map((investmentResult, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index}</td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.balance
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.accInterest
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {Math.trunc(
+                                                    investmentResult.yearlyInterest
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                            <td>
+                                                {(
+                                                    investmentResult.yearlyInterestShare *
+                                                    100
+                                                ).toLocaleString('en-US')}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                         </tbody>
                     </table>
                 </div>

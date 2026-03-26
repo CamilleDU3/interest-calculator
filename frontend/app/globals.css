@@ -7,6 +7,18 @@
   --secondary: #6b6b6b;
   --hover: #D1D5DB; /* TODO: check the hover of every button and use this color for hovering instead */
   --background-image: url('/light-bg.jpg');
+  
+  /* CHART COLORS
+  (when adding here, dont forget to add it in utils/useChartColors.ts too */
+  --chart-1-line: #1560827d;
+  --chart-1-fill: #1560827d; 
+  --chart-2-line: #9bc1ff52;
+  --chart-2-fill: #3b82f61a;
+  --chart-3-line: #ffaa3b5a;
+  --chart-3-fill: #ffaa3b46;
+
+  --chart-point-border: #1560827d;
+  --chart-point-background: #1560827d;
 }
 
 @theme inline {

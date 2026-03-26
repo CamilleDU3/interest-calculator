@@ -26,7 +26,7 @@ export default function InputNumber({
                 id={id}
                 name={name ?? id + '-name'}
                 value={value}
-                className="bg-background text-center border border-gray-300 rounded px-4 py-1 shadow ${className || ''}"
+                className={`bg-background text-center border border-gray-300 rounded px-4 py-1 shadow ${className || ''}`}
                 {...props}
             />
         </div>
