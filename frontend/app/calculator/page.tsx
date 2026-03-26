@@ -139,7 +139,7 @@ export default function CalculatorPage() {
                     ></LineGraph>
                 </div>
 
-                <div className="h-[70vh] overflow-auto mx-10">
+                <div className="h-[70vh] w-[50vh] overflow-auto mx-10">
                     <table className="text-center border-separate border-spacing-4">
                         <thead className="sticky top-0 backdrop-blur-[1.5px]">
                             <tr>
@@ -161,11 +161,6 @@ export default function CalculatorPage() {
                                     return (
                                         <tr key={index}>
                                             <td>{index}</td>
-                                            <td>
-                                                {investmentResult.balance.toLocaleString(
-                                                    'en-US'
-                                                )}
-                                            </td>
                                             <td>
                                                 {Math.trunc(
                                                     investmentResult.balance
