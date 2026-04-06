@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 //TODO: style the table and fix responsive issue
 //TODO: encapsulate the table
 //TODO: add tooltip on chart explaining the meaning of the values in each column
+//TODO: add advanced mode input and sync it with the button mode
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
@@ -33,6 +34,7 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
+    const [currMode, setCurrMode] = useState('simple');
     const [investmentResults, setInvestmentResults] = useState<
         InvestmentResult[]
     >([]);
@@ -106,9 +108,39 @@ export default function CalculatorPage() {
                     Modes
                 </p>
                 <div className="flex">
-                    <Button variant="secondary">Simple</Button>
-                    <Button variant="secondary">Advanced</Button>
-                    <Button hidden disabled variant="secondary">
+                    <Button
+                        name="simple"
+                        variant="secondary"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={currMode === 'simple' ? 'active' : 'default'}
+                    >
+                        Simple
+                    </Button>
+                    <Button
+                        name="advanced"
+                        variant="secondary"
+                        className="default"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={currMode === 'advanced' ? 'active' : 'default'}
+                    >
+                        Advanced
+                    </Button>
+                    <Button
+                        hidden
+                        disabled
+                        name="monte-carlo"
+                        variant="secondary"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={
+                            currMode === 'monte-carlo' ? 'active' : 'default'
+                        }
+                    >
                         Monte-Carlo
                     </Button>
                 </div>
