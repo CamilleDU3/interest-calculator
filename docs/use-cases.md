@@ -17,7 +17,7 @@
 ## UC2 – Variable ROI / ETF [MVP]
 - **US1** – Add example ETF (MSCI World or S&P500) to simulation
 - **US2** – Import monthly ROI data via copy-paste with delimiter selection
-- **US3** – Choose investment start month and year
+- **US3** – Add withdrawal at select month and qyear
 
 ## UC3 – Experience Mode [MVP]
 - **US1** – Play mode: view month-by-month evolution with pause, reset and speed adjustement
