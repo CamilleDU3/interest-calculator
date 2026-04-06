@@ -8,6 +8,7 @@ import calcInvestmentGrowth, {
 import React from 'react';
 import { useEffect, useState } from 'react';
 
+//TODO: encapsulate the checks into functions and move them along with the inputRules elsewhere
 //TODO: style the table and fix responsive issue
 //TODO: encapsulate the table
 //TODO: add tooltip on chart explaining the meaning of the values in each column
@@ -15,6 +16,14 @@ import { useEffect, useState } from 'react';
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 export default function CalculatorPage() {
+    const inputRules: Record<string, { min?: number; max?: number }> = {
+        investLengthYear: { min: 0, max: 100 },
+        monthlyIncrement: { min: 0 },
+        interestRate: { min: 0, max: 1000 },
+        investLengthMonth: { min: 0, max: 12 },
+        inflationRate: { min: 0, max: 100 },
+    };
+
     const [inputs, setInputs] = useState({
         initialCapital: 10000,
         monthlyIncrement: 1000,
@@ -31,10 +40,27 @@ export default function CalculatorPage() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
+
+        let correctedValue = parseFloat(value);
+        if (type === 'number') {
+            if (!isNaN(correctedValue)) {
+                const rules = inputRules[name];
+                if (rules) {
+                    if (rules.min !== undefined)
+                        correctedValue = Math.max(correctedValue, rules.min);
+                    if (rules.max !== undefined)
+                        correctedValue = Math.min(correctedValue, rules.max);
+                }
+            } else {
+                correctedValue = 0;
+            }
+        }
+
         setInputs((prevInputs) => {
             return {
                 ...prevInputs,
-                [name]: type === 'number' ? parseFloat(value) || 0 : value,
+                [name]:
+                    type === 'number' ? correctedValue || 0 : correctedValue,
             };
         });
     };
