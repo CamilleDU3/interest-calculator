@@ -5,9 +5,11 @@ import LineGraph from '@/components/LineGraph';
 import calcInvestmentGrowth, {
     InvestmentResult,
 } from '@/lib/calculators/investmentGrowth';
+import React from 'react';
 import { useEffect, useState } from 'react';
 
-//TODO: use a table of chartjs instead of native html <table>
+//TODO: style the table and fix responsive issue
+//TODO: encapsulate the table
 //TODO: add tooltip on chart explaining the meaning of the values in each column
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
@@ -25,6 +27,7 @@ export default function CalculatorPage() {
     const [investmentResults, setInvestmentResults] = useState<
         InvestmentResult[]
     >([]);
+    const [openTableRow, setOpenTableRow] = useState<number | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
@@ -49,6 +52,26 @@ export default function CalculatorPage() {
 
         setInvestmentResults(investmentResults);
     }, [inputs]);
+
+    const toggleOpenTableRow = (indexYear: number | null) => {
+        setOpenTableRow((prev: number | null) =>
+            prev === indexYear ? null : indexYear
+        );
+    };
+    const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+    ];
 
     return (
         <main>
@@ -157,32 +180,101 @@ export default function CalculatorPage() {
                                         index % 12 === 0 ||
                                         index == investmentResults.length - 1
                                 )
-                                .map((investmentResult, index) => {
+                                .map((investmentResult, indexYear) => {
+                                    //TODO: refactor and change the manuel alignment to something better and less fragile
+                                    const startMonth = indexYear * 12 - 11;
+                                    const endMonth = indexYear * 12 + 1;
+                                    const months = investmentResults.slice(
+                                        startMonth,
+                                        endMonth
+                                    );
                                     return (
-                                        <tr key={index}>
-                                            <td>{index}</td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.balance
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.accInterest
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.yearlyInterest
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {(
-                                                    investmentResult.yearlyInterestShare *
-                                                    100
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                        </tr>
+                                        <React.Fragment key={indexYear}>
+                                            <tr
+                                                onClick={() => {
+                                                    return toggleOpenTableRow(
+                                                        indexYear
+                                                    );
+                                                }}
+                                                key={indexYear}
+                                            >
+                                                <td className="flex items-center gap-3">
+                                                    <span>
+                                                        {openTableRow ===
+                                                        indexYear
+                                                            ? '▼'
+                                                            : '▶'}
+                                                    </span>
+                                                    <span> {indexYear}</span>
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.balance
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.accInterest
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.yearlyInterest
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {(
+                                                        investmentResult.yearlyInterestShare *
+                                                        100
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                            </tr>
+                                            {openTableRow === indexYear &&
+                                                months.map(
+                                                    (month, indexMonth) => (
+                                                        <tr
+                                                            key={`${indexYear}-${indexMonth}`}
+                                                        >
+                                                            <td>
+                                                                {
+                                                                    monthNames[
+                                                                        indexMonth
+                                                                    ]
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.balance
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.accInterest
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.yearlyInterest
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {(
+                                                                    month.yearlyInterestShare *
+                                                                    100
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
+                                        </React.Fragment>
                                     );
                                 })}
                         </tbody>
