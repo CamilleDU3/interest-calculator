@@ -38,6 +38,7 @@ export default function CalculatorPage() {
     const [investmentResults, setInvestmentResults] = useState<
         InvestmentResult[]
     >([]);
+    const [graphTimeframe, setGraphTimeframe] = useState('year');
     const [openTableRow, setOpenTableRow] = useState<number | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,8 +216,40 @@ export default function CalculatorPage() {
                 </fieldset>
 
                 <div className="mt-10 ml-10 h-[70vh] w-[100vh]">
+                    <div className="flex items-center justify-center">
+                        <Button
+                            name="month"
+                            variant="secondary"
+                            className=""
+                            onClick={(event) => {
+                                setGraphTimeframe(event.currentTarget.name);
+                            }}
+                            state={
+                                graphTimeframe === 'month'
+                                    ? 'active'
+                                    : 'default'
+                            }
+                        >
+                            Month
+                        </Button>
+                        <Button
+                            name="year"
+                            variant="secondary"
+                            className="default"
+                            onClick={(event) => {
+                                setGraphTimeframe(event.currentTarget.name);
+                            }}
+                            state={
+                                graphTimeframe === 'year' ? 'active' : 'default'
+                            }
+                        >
+                            Year
+                        </Button>
+                    </div>
+
                     <LineGraph
                         investmentResults={investmentResults}
+                        timeframe={graphTimeframe}
                     ></LineGraph>
                 </div>
 
