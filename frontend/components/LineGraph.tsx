@@ -24,55 +24,68 @@ ChartJS.register(
 );
 type LineGraphProps = {
     investmentResults: InvestmentResult[];
+    timeframe: string;
 };
-export default function LineGraph({ investmentResults }: LineGraphProps) {
+export default function LineGraph({
+    investmentResults,
+    timeframe = 'year',
+}: LineGraphProps) {
     const chartColors = useChartColors();
     if (!chartColors) return <div> Loading... </div>;
 
-    const xAxisLabelType = 'Year';
-    const yearlyResults: InvestmentResult[] = investmentResults.filter(
-        (_, index) => index % 12 === 0 || index == investmentResults.length - 1
-    );
-    const xAxisLabelYear = [...yearlyResults.keys()];
+    let xAxisLabelType: string = 'Month';
+    let results: InvestmentResult[] = investmentResults;
+    if (timeframe == 'year') {
+        xAxisLabelType = 'Year';
+        results = investmentResults.filter(
+            (_, index) =>
+                index % 12 === 0 || index == investmentResults.length - 1
+        );
+    }
+    let xAxisLabel: number[] = [...results.keys()];
+
     const data = {
-        labels: xAxisLabelYear,
+        labels: xAxisLabel,
         datasets: [
             {
+                // ---- Interest ----
                 // ---- DATA ----
                 label: 'Interest',
-                data: yearlyResults.map((value) => value.accInterest),
+                data: results.map((value) => value.accInterest),
                 fill: true,
-                borderColor: chartColors.chart3Line, //getCSSVar('--chart-3-line'),
-                backgroundColor: chartColors.chart3Fill, //getCSSVar('--chart-3-fill'),
+                borderColor: chartColors.chart3Line,
+                backgroundColor: chartColors.chart3Fill,
                 stack: 'combined',
                 // ---- POINT CUSTOMISATION ----
                 pointRadius: 0,
                 pointHoverRadius: 0,
             },
             {
+                // ---- Invested ----
                 // ---- DATA ----
                 label: 'Invested',
-                data: yearlyResults.map((value) => value.accInvestment),
+                data: results.map((value) => value.accInvestment),
                 fill: true,
-                borderColor: chartColors.chart2Line, //getCSSVar('--chart-2-line'),
-                backgroundColor: chartColors.chart2Fill, //getCSSVar('--chart-2-fill'),
+                borderColor: chartColors.chart2Line,
+                backgroundColor: chartColors.chart2Fill,
                 stack: 'combined',
                 // ---- POINT CUSTOMISATION ----
                 pointRadius: 0,
                 pointHoverRadius: 0,
             },
             {
+                // ---- Total ----
                 // ---- DATA ----
                 label: 'Total',
-                data: yearlyResults.map((value) => value.balance),
+                data: results.map((value) => value.balance),
                 fill: false,
-                borderColor: chartColors.chart1Line, //getCSSVar('--chart-1-line'),
+                borderColor: chartColors.chart1Line,
                 // ---- POINT CUSTOMISATION ----
                 pointRadius: 2,
                 pointHoverRadius: 10,
                 pointBorderWidth: 1,
-                pointBorderColor: chartColors.chartPointBorder, //getCSSVar('--chart-point-border'),
-                pointBackgroundColor: chartColors.chartPointBackground, //getCSSVar('--chart-point-border'),
+                pointBorderColor: chartColors.chartPointBorder,
+                pointBackgroundColor: chartColors.chartPointBackground,
             },
         ],
     };

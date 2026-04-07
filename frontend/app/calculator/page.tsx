@@ -5,14 +5,26 @@ import LineGraph from '@/components/LineGraph';
 import calcInvestmentGrowth, {
     InvestmentResult,
 } from '@/lib/calculators/investmentGrowth';
+import React from 'react';
 import { useEffect, useState } from 'react';
 
-//TODO: use a table of chartjs instead of native html <table>
+//TODO: encapsulate the checks into functions and move them along with the inputRules elsewhere
+//TODO: style the table and fix responsive issue
+//TODO: encapsulate the table
 //TODO: add tooltip on chart explaining the meaning of the values in each column
+//TODO: add advanced mode input and sync it with the button mode
 //TODO: add the compound type (before increment, after increment) input
 //TODO: allow different compounding time for inflation rate
 //TODO: update the UI so that investment length of year and month are next to each other with only one label : Investment Length
 export default function CalculatorPage() {
+    const inputRules: Record<string, { min?: number; max?: number }> = {
+        investLengthYear: { min: 0, max: 100 },
+        monthlyIncrement: { min: 0 },
+        interestRate: { min: 0, max: 1000 },
+        investLengthMonth: { min: 0, max: 12 },
+        inflationRate: { min: 0, max: 100 },
+    };
+
     const [inputs, setInputs] = useState({
         initialCapital: 10000,
         monthlyIncrement: 1000,
@@ -22,16 +34,36 @@ export default function CalculatorPage() {
         compoundTime: 12,
         inflationRate: 2,
     });
+    const [currMode, setCurrMode] = useState('simple');
     const [investmentResults, setInvestmentResults] = useState<
         InvestmentResult[]
     >([]);
+    const [graphTimeframe, setGraphTimeframe] = useState('year');
+    const [openTableRow, setOpenTableRow] = useState<number | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
+
+        let correctedValue = parseFloat(value);
+        if (type === 'number') {
+            if (!isNaN(correctedValue)) {
+                const rules = inputRules[name];
+                if (rules) {
+                    if (rules.min !== undefined)
+                        correctedValue = Math.max(correctedValue, rules.min);
+                    if (rules.max !== undefined)
+                        correctedValue = Math.min(correctedValue, rules.max);
+                }
+            } else {
+                correctedValue = 0;
+            }
+        }
+
         setInputs((prevInputs) => {
             return {
                 ...prevInputs,
-                [name]: type === 'number' ? parseFloat(value) || 0 : value,
+                [name]:
+                    type === 'number' ? correctedValue || 0 : correctedValue,
             };
         });
     };
@@ -50,6 +82,26 @@ export default function CalculatorPage() {
         setInvestmentResults(investmentResults);
     }, [inputs]);
 
+    const toggleOpenTableRow = (indexYear: number | null) => {
+        setOpenTableRow((prev: number | null) =>
+            prev === indexYear ? null : indexYear
+        );
+    };
+    const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+    ];
+
     return (
         <main>
             <div className="mx-30 mt-5 mb-10">
@@ -57,9 +109,39 @@ export default function CalculatorPage() {
                     Modes
                 </p>
                 <div className="flex">
-                    <Button variant="secondary">Simple</Button>
-                    <Button variant="secondary">Advanced</Button>
-                    <Button hidden disabled variant="secondary">
+                    <Button
+                        name="simple"
+                        variant="secondary"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={currMode === 'simple' ? 'active' : 'default'}
+                    >
+                        Simple
+                    </Button>
+                    <Button
+                        name="advanced"
+                        variant="secondary"
+                        className="default"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={currMode === 'advanced' ? 'active' : 'default'}
+                    >
+                        Advanced
+                    </Button>
+                    <Button
+                        hidden
+                        disabled
+                        name="monte-carlo"
+                        variant="secondary"
+                        onClick={(event) => {
+                            setCurrMode(event.currentTarget.name);
+                        }}
+                        state={
+                            currMode === 'monte-carlo' ? 'active' : 'default'
+                        }
+                    >
                         Monte-Carlo
                     </Button>
                 </div>
@@ -134,8 +216,40 @@ export default function CalculatorPage() {
                 </fieldset>
 
                 <div className="mt-10 ml-10 h-[70vh] w-[100vh]">
+                    <div className="flex items-center justify-center">
+                        <Button
+                            name="month"
+                            variant="secondary"
+                            className=""
+                            onClick={(event) => {
+                                setGraphTimeframe(event.currentTarget.name);
+                            }}
+                            state={
+                                graphTimeframe === 'month'
+                                    ? 'active'
+                                    : 'default'
+                            }
+                        >
+                            Month
+                        </Button>
+                        <Button
+                            name="year"
+                            variant="secondary"
+                            className="default"
+                            onClick={(event) => {
+                                setGraphTimeframe(event.currentTarget.name);
+                            }}
+                            state={
+                                graphTimeframe === 'year' ? 'active' : 'default'
+                            }
+                        >
+                            Year
+                        </Button>
+                    </div>
+
                     <LineGraph
                         investmentResults={investmentResults}
+                        timeframe={graphTimeframe}
                     ></LineGraph>
                 </div>
 
@@ -157,32 +271,101 @@ export default function CalculatorPage() {
                                         index % 12 === 0 ||
                                         index == investmentResults.length - 1
                                 )
-                                .map((investmentResult, index) => {
+                                .map((investmentResult, indexYear) => {
+                                    //TODO: refactor and change the manuel alignment to something better and less fragile
+                                    const startMonth = indexYear * 12 - 11;
+                                    const endMonth = indexYear * 12 + 1;
+                                    const months = investmentResults.slice(
+                                        startMonth,
+                                        endMonth
+                                    );
                                     return (
-                                        <tr key={index}>
-                                            <td>{index}</td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.balance
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.accInterest
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {Math.trunc(
-                                                    investmentResult.yearlyInterest
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                            <td>
-                                                {(
-                                                    investmentResult.yearlyInterestShare *
-                                                    100
-                                                ).toLocaleString('en-US')}
-                                            </td>
-                                        </tr>
+                                        <React.Fragment key={indexYear}>
+                                            <tr
+                                                onClick={() => {
+                                                    return toggleOpenTableRow(
+                                                        indexYear
+                                                    );
+                                                }}
+                                                key={indexYear}
+                                            >
+                                                <td className="flex items-center gap-3">
+                                                    <span>
+                                                        {openTableRow ===
+                                                        indexYear
+                                                            ? '▼'
+                                                            : '▶'}
+                                                    </span>
+                                                    <span> {indexYear}</span>
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.balance
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.accInterest
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {Math.trunc(
+                                                        investmentResult.yearlyInterest
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                                <td>
+                                                    {(
+                                                        investmentResult.yearlyInterestShare *
+                                                        100
+                                                    ).toLocaleString('en-US')}
+                                                </td>
+                                            </tr>
+                                            {openTableRow === indexYear &&
+                                                months.map(
+                                                    (month, indexMonth) => (
+                                                        <tr
+                                                            key={`${indexYear}-${indexMonth}`}
+                                                        >
+                                                            <td>
+                                                                {
+                                                                    monthNames[
+                                                                        indexMonth
+                                                                    ]
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.balance
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.accInterest
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {Math.trunc(
+                                                                    month.yearlyInterest
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                            <td>
+                                                                {(
+                                                                    month.yearlyInterestShare *
+                                                                    100
+                                                                ).toLocaleString(
+                                                                    'en-US'
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
+                                        </React.Fragment>
                                     );
                                 })}
                         </tbody>

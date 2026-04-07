@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import NavBar from '@/components/NavBar';
+import Adsense from '@/components/Adsense';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -32,6 +33,7 @@ export default function RootLayout({
                     backgroundSize: 'cover',
                 }}
             >
+                <Adsense />
                 <NavBar />
                 {children}
             </body>
